@@ -18,7 +18,7 @@ df <- table(quiz1Data$VAL)
   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21 
  75  42  33  30  26  29  23  70  99 119 152 199 233 495 483 486 357 502 232 312 164 
  22  23  24 
-159  47  53 
+159  47  xx ----answer represented by this value 
 
 
 
@@ -35,7 +35,7 @@ df <- table(quiz1Data$VAL)
 > dat <- read.xlsx(tmpData, 1, colIndex=c, rowIndex=r)
 > sum(dat$Zip*dat$Ext,na.rm=T) 
 
-[1] 36534720
+[1] xxx -- answer is represented by this value
 
 # quiz 1 question 3
 call <- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Frestaurants.xml"
@@ -51,4 +51,4 @@ call <- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Frestaurants.xml"
 
 
 FALSE  TRUE 
- 1200   127 
+ 1200   xxx --- answer is represented by this value 
