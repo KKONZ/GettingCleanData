@@ -1,0 +1,26 @@
+# quiz 1 question 1
+
+#The American Community Survey distributes downloadable data about United States communities. 
+#Download the 2006 microdata survey about housing for the state of Idaho using download.file() from here: 
+# https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06hid.csv 
+
+# and load the data into R. The code book, describing the variable names is here: 
+# https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FPUMSDataDict06.pdf 
+
+
+# How many properties are worth $1,000,000 or more?
+
+quiz1Data <- read.csv("./data/myData.csv", header=T)
+df <- table(quiz1Data$VAL)
+
+# 24 represents value of 1000000 or more
+
+  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21 
+ 75  42  33  30  26  29  23  70  99 119 152 199 233 495 483 486 357 502 232 312 164 
+ 22  23  24 
+159  47  53 
+
+
+
+# quiz 1 question 2
+
