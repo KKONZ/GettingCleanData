@@ -37,7 +37,7 @@ df <- table(quiz1Data$VAL)
 
 [1] xxx -- answer is represented by this value
 
-# quiz 1 question 3
+# quiz 1 question 4
 call <- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Frestaurants.xml"
 > r <- xmlInternalTreeParse(call)
 > rNode <- xmlRoot(r)
@@ -52,3 +52,52 @@ call <- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Frestaurants.xml"
 
 FALSE  TRUE 
  1200   xxx --- answer is represented by this value 
+
+# quiz 1 question 5
+
+> call <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv "
+DT <- fread(call)
+
+> check <- function (myY, myT) {
++     message(sprintf("Elapsed time: %.10f", t[3]))
++     print(y)
++ }
+> check(myY, myT)
+Elapsed time: 0.0200000000
+       1        2 
+99.80667 96.66534 
+
+
+> t <- system.time(y <- mean(DT$pwgtp15,by=DT$SEX))
+> check(myY, myT)
+Elapsed time: 0.0000000000
+[1] 98.21613
+
+
+> t <- system.time(y <- DT[,mean(pwgtp15),by=SEX])
+> check(myY, myT)
+Elapsed time: 0.0200000000
+   SEX       V1
+1:   1 99.80667
+2:   2 96.66534
+
+> t <- system.time(y <- rowMeans(DT)[DT$SEX==1]) + system.time(rowMeans(DT)[DT$SEX==2])
+Error in rowMeans(DT) : 'x' must be numeric
+Timing stopped at: 1.25 0 1.25 
+> check(myY, myT)
+Elapsed time: 0.0200000000
+   SEX       V1
+1:   1 99.80667
+2:   2 96.66534
+
+> t <- system.time(y <- mean(DT[DT$SEX==1,]$pwgtp15)) + system.time(mean(DT[DT$SEX==2,]$pwgtp15))
+> check(myY, myT)
+Elapsed time: 0.0800000000
+[1] 99.80667
+
+t <- system.time(y <- tapply(DT$pwgtp15,DT$SEX,mean))
+> check(myY, myT)
+Elapsed time: 0.0000000000
+       1        2 
+99.80667 96.66534
+
