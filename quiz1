@@ -49,3 +49,6 @@ call <- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Frestaurants.xml"
 > zipcode <- xpathSApply(rNode, "//zipcode", xmlValue)
 > table(zipcode == 21231)
 
+
+FALSE  TRUE 
+ 1200   127 
