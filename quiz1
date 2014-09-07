@@ -36,3 +36,16 @@ df <- table(quiz1Data$VAL)
 > sum(dat$Zip*dat$Ext,na.rm=T) 
 
 [1] 36534720
+
+# quiz 1 question 3
+call <- "http://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Frestaurants.xml"
+> r <- xmlInternalTreeParse(call)
+> rNode <- xmlRoot(r)
+> names(rNode[[1]][[1]])
+             name           zipcode      neighborhood   councildistrict    policedistrict 
+           "name"         "zipcode"    "neighborhood" "councildistrict"  "policedistrict" 
+       location_1 
+     "location_1" 
+> zipcode <- xpathSApply(rNode, "//zipcode", xmlValue)
+> table(zipcode == 21231)
+
