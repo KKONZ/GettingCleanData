@@ -24,3 +24,15 @@ df <- table(quiz1Data$VAL)
 
 # quiz 1 question 2
 
+
+# quiz 1 question 3
+
+> library("xlsx", lib.loc="C:/Program Files/R/R-3.1.0/library")
+> url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FDATA.gov_NGAP.xlsx"
+> download.file(url, tmpData, mode="wb")
+> r <- 18:23
+> c <- 7:15
+> dat <- read.xlsx(tmpData, 1, colIndex=c, rowIndex=r)
+> sum(dat$Zip*dat$Ext,na.rm=T) 
+
+[1] 36534720
