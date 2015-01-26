@@ -4,7 +4,7 @@
 >Date Downloaded _January 25th 2015_
 
 1. Merge data, these steps highlight merging the data tables together
-```
+```{r}
 xTest<- read.csv("./data/UCI HAR dataset/test/X_test.txt",header=FALSE,sep="",comment.char="",colClasses="numeric")
 yTest<- read.csv("./data/UCI HAR dataset/test/y_test.txt",header=FALSE,sep="")
 subTest<- read.csv("./data/UCI HAR dataset/test/subject_test.txt",header=FALSE,sep="")
@@ -17,13 +17,13 @@ CompleteData<- rbind(CombineTest, CombineTrain)
 
 ```
 2. Extracts only the measurements on the mean and standard deviation for each measurement. 
-```
+```{r}
 colNames<-grepl("mean\\(\\)|std\\(\\)|activity|subject", names(CompleteData))
 CompleteData<-CompleteData[,colNames]
 ```
 
 3. Uses descriptive activity names to name the activities in the data set
-```
+```{r}
 names(yTest)<-"activity.labels"
 names(subTest)<- "subjectID"
 
