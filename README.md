@@ -3,7 +3,7 @@
 
 >Date Downloaded _January 25th 2015_
 
-1. Merge data, these steps highlight merging the data tables together
+*Rule 1* Merge data, these steps highlight merging the data tables together
 ```{r}
 xTest<- read.csv("./data/UCI HAR dataset/test/X_test.txt",header=FALSE,sep="",comment.char="",colClasses="numeric")
 yTest<- read.csv("./data/UCI HAR dataset/test/y_test.txt",header=FALSE,sep="")
@@ -16,13 +16,13 @@ CombineTrain<- cbind(xTrain, yTrain, subTrain)
 CompleteData<- rbind(CombineTest, CombineTrain)
 
 ```
-2. Extracts only the measurements on the mean and standard deviation for each measurement. 
+*Rule 2* Extracts only the measurements on the mean and standard deviation for each measurement. 
 ```{r}
 colNames<-grepl("mean\\(\\)|std\\(\\)|activity|subject", names(CompleteData))
 CompleteData<-CompleteData[,colNames]
 ```
 
-3. Uses descriptive activity names to name the activities in the data set
+*Rule 3* Uses descriptive activity names to name the activities in the data set
 ```{r}
 names(yTest)<-"activity.labels"
 names(subTest)<- "subjectID"
@@ -35,6 +35,10 @@ names(CompleteData)<- c(as.character(varNames$V2),"activity.labels","subjectID")
 CompleteData$activity.labels<-as.factor(CompleteData$activity.labels)
 levels(CompleteData$activity.labels)<- list(WALKING="1",WALKING_UPSTAIRS="2", WALKING_DOWNSTAIRS="3", SITTING="4", STANDING="5",LAYING="6")
 
+
+```
+*Rule 4* Appropriately labels the data set with descriptive variable names. 
+```{r}
 names(CompleteData)<- c("tBodyAcc_meanX","tBodyAcc_meanY","tBodyAcc_meanZ","tBodyAcc_stdX","tBodyAcc_stdY","tBodyAcc_stdZ","tGravityAcc_meanX","tGravityAcc_meanY","tGravityAcc_meanZ","tGravityAcc_stdX"
                         ,"tGravityAcc_stdY","tGravityAcc_stdZ","tBodyAccJerk_meanX","tBodyAccJerk_meanY","tBodyAccJerk_meanZ","tBodyAccJerk_stdX","tBodyAccJerk_stdY","tBodyAccJerk_stdZ","tBodyGyro_meanX","tBodyGyro_meanY" 
                         ,"tBodyGyro_meanZ","tBodyGyro_stdX","tBodyGyro_stdY","tBodyGyro_stdZ","tBodyGyroJerk_meanX","tBodyGyroJerk_meanY","tBodyGyroJerk_meanZ","tBodyGyroJerk_stdX","tBodyGyroJerk_stdY","tBodyGyroJerk_stdZ" 
@@ -42,7 +46,21 @@ names(CompleteData)<- c("tBodyAcc_meanX","tBodyAcc_meanY","tBodyAcc_meanZ","tBod
                         ,"fBodyAcc_meanX","fBodyAcc_meanY","fBodyAcc_meanZ","fBodyAcc_stdX","fBodyAcc_stdY","fBodyAcc_stdZ","fBodyAccJerk_meanX","fBodyAccJerk_meanY","fBodyAccJerk_meanZ","fBodyAccJerk_stdX"
                         ,"fBodyAccJerk_stdY","fBodyAccJerk_stdZ","fBodyGyro_meanX","fBodyGyro_meanY","fBodyGyro_meanZ","fBodyGyro_stdX","fBodyGyro_stdY","fBodyGyro_stdZ","fBodyAccMag_mean","fBodyAccMag_std"
                         ,"fBodyAccJerkMag_mean","fBodyAccJerkMag_std","fBodyGyroMag_mean","fBodyGyroMag_std","fBodyGyroJerkMag_mean","fBodyGyroJerkMag_std","activity","subjectID" )
+
 ```
+
+*Rule 5* From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+```{r}
+Melt<-melt(CompleteData, id=c("subjectID","activity")) 
+TidyData<- dcast(Melt, subjectID+activity ~ variable,fun.aggregate=mean)
+
+CleanData<- dcast(Melt,subjectID+activity+variable~...,fun.aggregate=mean)
+write.table(CleanData, "TidyData.txt",append = TRUE,quote=FALSE,sep=" ",dec=".",row.names=FALSE,col.names=c("ID","ActType","VarMeas","Mean"))
+
+
+```
+
+
 ## This section summarizes the data and how it was collected
 ==================================================================
 Human Activity Recognition Using Smartphones Dataset
