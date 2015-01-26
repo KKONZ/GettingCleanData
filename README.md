@@ -59,7 +59,7 @@ write.table(CleanData, "TidyData.txt",append = TRUE,quote=FALSE,sep=" ",dec=".",
 
 
 ```
-Code Book >ID: is the identifying number for the 30 participants >ActType: is the activity that the participant was recorded doing >VarMeas: is the variable that was measured>Mean: is the average for the given activity
+Code Book: *ID: is the identifying number for the 30 participants *ActType: is the activity that the participant was recorded doing *VarMeas: is the variable that was measured *Mean: is the average for the given activity
 
 ## This section summarizes the data and how it was collected
 ==================================================================
