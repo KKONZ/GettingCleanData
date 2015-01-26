@@ -1,4 +1,9 @@
-## This section summarizes the data and how it was collected
+###Course Project
+=================
+
+>Date Downloaded _January 25th 2015_
+
+## *This section summarizes the data and how it was collected*
 ==================================================================
 Human Activity Recognition Using Smartphones Dataset
 Version 1.0
