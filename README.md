@@ -3,6 +3,46 @@
 
 >Date Downloaded _January 25th 2015_
 
+1. Merge data, these steps highlight merging the data tables together
+```
+xTest<- read.csv("./data/UCI HAR dataset/test/X_test.txt",header=FALSE,sep="",comment.char="",colClasses="numeric")
+yTest<- read.csv("./data/UCI HAR dataset/test/y_test.txt",header=FALSE,sep="")
+subTest<- read.csv("./data/UCI HAR dataset/test/subject_test.txt",header=FALSE,sep="")
+xTrain<- read.csv("./data/UCI HAR dataset/train/X_train.txt",header=FALSE,sep="",comment.char="",colClasses="numeric")
+yTrain<- read.csv("./data/UCI HAR dataset/train/y_train.txt",header=FALSE,sep="")
+subTrain<-read.csv("./data/UCI HAR dataset/train/subject_train.txt",header=FALSE,sep="")
+CombineTest<- cbind(xTest,yTest,subTest)
+CombineTrain<- cbind(xTrain, yTrain, subTrain)
+CompleteData<- rbind(CombineTest, CombineTrain)
+
+```
+2. Extracts only the measurements on the mean and standard deviation for each measurement. 
+```
+colNames<-grepl("mean\\(\\)|std\\(\\)|activity|subject", names(CompleteData))
+CompleteData<-CompleteData[,colNames]
+```
+
+3. Uses descriptive activity names to name the activities in the data set
+```
+names(yTest)<-"activity.labels"
+names(subTest)<- "subjectID"
+
+names(yTrain)<-"activity.labels"
+names(subTrain)<- "subjectID"
+
+names(CompleteData)<- c(as.character(varNames$V2),"activity.labels","subjectID")
+
+CompleteData$activity.labels<-as.factor(CompleteData$activity.labels)
+levels(CompleteData$activity.labels)<- list(WALKING="1",WALKING_UPSTAIRS="2", WALKING_DOWNSTAIRS="3", SITTING="4", STANDING="5",LAYING="6")
+
+names(CompleteData)<- c("tBodyAcc_meanX","tBodyAcc_meanY","tBodyAcc_meanZ","tBodyAcc_stdX","tBodyAcc_stdY","tBodyAcc_stdZ","tGravityAcc_meanX","tGravityAcc_meanY","tGravityAcc_meanZ","tGravityAcc_stdX"
+                        ,"tGravityAcc_stdY","tGravityAcc_stdZ","tBodyAccJerk_meanX","tBodyAccJerk_meanY","tBodyAccJerk_meanZ","tBodyAccJerk_stdX","tBodyAccJerk_stdY","tBodyAccJerk_stdZ","tBodyGyro_meanX","tBodyGyro_meanY" 
+                        ,"tBodyGyro_meanZ","tBodyGyro_stdX","tBodyGyro_stdY","tBodyGyro_stdZ","tBodyGyroJerk_meanX","tBodyGyroJerk_meanY","tBodyGyroJerk_meanZ","tBodyGyroJerk_stdX","tBodyGyroJerk_stdY","tBodyGyroJerk_stdZ" 
+                        ,"tBodyAccMag_mean","tBodyAccMag_std","tGravityAccMag_mean","tGravityAccMag_std","tBodyAccJerkMag_mean","tBodyAccJerkMag_std","tBodyGyroMag_mean","tBodyGyroMag_std","tBodyGyroJerkMag_mean","tBodyGyroJerkMag_std"
+                        ,"fBodyAcc_meanX","fBodyAcc_meanY","fBodyAcc_meanZ","fBodyAcc_stdX","fBodyAcc_stdY","fBodyAcc_stdZ","fBodyAccJerk_meanX","fBodyAccJerk_meanY","fBodyAccJerk_meanZ","fBodyAccJerk_stdX"
+                        ,"fBodyAccJerk_stdY","fBodyAccJerk_stdZ","fBodyGyro_meanX","fBodyGyro_meanY","fBodyGyro_meanZ","fBodyGyro_stdX","fBodyGyro_stdY","fBodyGyro_stdZ","fBodyAccMag_mean","fBodyAccMag_std"
+                        ,"fBodyAccJerkMag_mean","fBodyAccJerkMag_std","fBodyGyroMag_mean","fBodyGyroMag_std","fBodyGyroJerkMag_mean","fBodyGyroJerkMag_std","activity","subjectID" )
+```
 ## This section summarizes the data and how it was collected
 ==================================================================
 Human Activity Recognition Using Smartphones Dataset
@@ -95,3 +135,5 @@ Appropriately labels the data set with descriptive variable names.
 From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
 Good luck!
+
+
