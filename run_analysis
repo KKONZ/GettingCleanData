@@ -1,0 +1,54 @@
+library(reshape2)
+# This script requires a ./data directory in which the UCI HAR dataset has been saved to
+
+# Load Test Files
+xTest<- read.csv("./data/UCI HAR dataset/test/X_test.txt",header=FALSE,sep="",comment.char="",colClasses="numeric")
+yTest<- read.csv("./data/UCI HAR dataset/test/y_test.txt",header=FALSE,sep="")
+subTest<- read.csv("./data/UCI HAR dataset/test/subject_test.txt",header=FALSE,sep="")
+# Load Train Files
+xTrain<- read.csv("./data/UCI HAR dataset/train/X_train.txt",header=FALSE,sep="",comment.char="",colClasses="numeric")
+yTrain<- read.csv("./data/UCI HAR dataset/train/y_train.txt",header=FALSE,sep="")
+subTrain<-read.csv("./data/UCI HAR dataset/train/subject_train.txt",header=FALSE,sep="")
+
+names(yTest)<-"activity.labels"
+names(subTest)<- "subjectID"
+
+# Make one flat file for test, name, and subject combined
+CombineTest<- cbind(xTest,yTest,subTest)
+# change names in Train and subject train
+names(yTrain)<-"activity.labels"
+names(subTrain)<- "subjectID"
+
+#make one flat file for train and subject train
+CombineTrain<- cbind(xTrain, yTrain, subTrain)
+# combine CombineTest and CombineTrain into CompleteDat
+CompleteData<- rbind(CombineTest, CombineTrain)
+
+#use features.txt for variable names in CompleteData
+varNames<- read.csv("./data/UCI HAR dataset/features.txt",header=FALSE, sep="")
+names(CompleteData)<- c(as.character(varNames$V2),"activity.labels","subjectID")
+
+# Grab mean and std
+colNames<-grepl("mean\\(\\)|std\\(\\)|activity|subject", names(CompleteData))
+CompleteData<-CompleteData[,colNames]
+
+# Make descriptive list for activities
+CompleteData$activity.labels<-as.factor(CompleteData$activity.labels)
+levels(CompleteData$activity.labels)<- list(WALKING="1",WALKING_UPSTAIRS="2", WALKING_DOWNSTAIRS="3", SITTING="4", STANDING="5",LAYING="6")
+
+# Condense the names of attributes so they are more descriptive
+names(CompleteData)<- c("tBodyAcc_meanX","tBodyAcc_meanY","tBodyAcc_meanZ","tBodyAcc_stdX","tBodyAcc_stdY","tBodyAcc_stdZ","tGravityAcc_meanX","tGravityAcc_meanY","tGravityAcc_meanZ","tGravityAcc_stdX"
+                        ,"tGravityAcc_stdY","tGravityAcc_stdZ","tBodyAccJerk_meanX","tBodyAccJerk_meanY","tBodyAccJerk_meanZ","tBodyAccJerk_stdX","tBodyAccJerk_stdY","tBodyAccJerk_stdZ","tBodyGyro_meanX","tBodyGyro_meanY" 
+                        ,"tBodyGyro_meanZ","tBodyGyro_stdX","tBodyGyro_stdY","tBodyGyro_stdZ","tBodyGyroJerk_meanX","tBodyGyroJerk_meanY","tBodyGyroJerk_meanZ","tBodyGyroJerk_stdX","tBodyGyroJerk_stdY","tBodyGyroJerk_stdZ" 
+                        ,"tBodyAccMag_mean","tBodyAccMag_std","tGravityAccMag_mean","tGravityAccMag_std","tBodyAccJerkMag_mean","tBodyAccJerkMag_std","tBodyGyroMag_mean","tBodyGyroMag_std","tBodyGyroJerkMag_mean","tBodyGyroJerkMag_std"
+                        ,"fBodyAcc_meanX","fBodyAcc_meanY","fBodyAcc_meanZ","fBodyAcc_stdX","fBodyAcc_stdY","fBodyAcc_stdZ","fBodyAccJerk_meanX","fBodyAccJerk_meanY","fBodyAccJerk_meanZ","fBodyAccJerk_stdX"
+                        ,"fBodyAccJerk_stdY","fBodyAccJerk_stdZ","fBodyGyro_meanX","fBodyGyro_meanY","fBodyGyro_meanZ","fBodyGyro_stdX","fBodyGyro_stdY","fBodyGyro_stdZ","fBodyAccMag_mean","fBodyAccMag_std"
+                        ,"fBodyAccJerkMag_mean","fBodyAccJerkMag_std","fBodyGyroMag_mean","fBodyGyroMag_std","fBodyGyroJerkMag_mean","fBodyGyroJerkMag_std","activity","subjectID" )
+
+
+# Melt and create new average info "TidyData" set
+Melt<-melt(CompleteData, id=c("subjectID","activity")) 
+TidyData<- dcast(Melt, subjectID+activity ~ variable,fun.aggregate=mean)
+
+CleanData<- dcast(Melt,subjectID+activity+variable~...,fun.aggregate=mean)
+write.table(CleanData, "TidyData.txt",append = TRUE,quote=FALSE,sep=" ",dec=".",row.names=FALSE,col.names=c("ID","ActType","VarMeas","Mean"))
